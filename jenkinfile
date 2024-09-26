@@ -2,16 +2,18 @@ pipeline {
     agent any
 
     stages {
+        stage('Cleanup') {
+            steps {
+                cleanWs() // Clean workspace at the beginning
+            }
+        }
+
         stage('Install Dependencies and Restart PM2') {
             steps {
                 script {
-                    sh 'cd /Users/apple/dedeeededed/jenkins-testing && ls && git pull'
-                    // Install npm packages
-                    sh 'whoami'
-                    //
-                    sh 'npm i'
-                    // Restart all PM2 processes
-                    sh 'pm2 restart 0'
+                    sh 'cd /jenkins-testing && ls && git pull' // Navigate to the directory, list files, and pull latest changes
+                    sh 'npm install' // Install npm packages
+                    sh 'pm2 restart doo || pm2 start npm --name doo -- run start' // Restart or start the PM2 process
                 }
             }
         }
